@@ -1,0 +1,8 @@
+the best vendor/OS and memory size with a specific CPU score
+what is the best memory size for the best 6230R CPU score
+the best kernel version
+best vendor - why he is the best vendor
+best Intel Compiler version for all CPU scores
+best memory speed
+correlation between the TDP (power) and the Score
+cores and threads depending of the threads
