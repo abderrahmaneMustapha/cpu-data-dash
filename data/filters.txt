@@ -1,0 +1,4 @@
+filters by
+
+
+Vendor , OS ,Kernel, Ver , Mem, Dimms, Size, Rank, Speed, Cores, Threads

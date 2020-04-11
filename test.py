@@ -1,10 +1,16 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+"""
 from openpyxl.workbook import Workbook
 from openpyxl.chart import PieChart
 from openpyxl import load_workbook
+"""
 
+all_data = pd.read_csv('data/SpeCopyspec.csv')
+print("\n info about the all data \n")
+
+print("number of ver ", all_data['Vendor'].unique())
 # example
 """ 
 wb = load_workbook('SpeCopy.xlsx')
@@ -16,7 +22,7 @@ for row in ws.iter_rows(min_row=1, max_col=20, max_row=20, values_only=True):
     for cell in row:        
         if   cell == 'DIT400TR-55R/55RL':
             print(cell)
-"""
+
 all_data = pd.read_csv('SpeCopyspec.csv')
 print("\n info about the all data \n")
 print(all_data.info())
@@ -32,7 +38,7 @@ print(data_filter.shape)
 
 
 
-print("\n find max \n")
+print("\n find max  and min \n")
 data_max = data_filter.groupby(['Vendor','Model'], sort=False)['Score'].transform(max) == data_filter['Score']
 data_min = data_filter.groupby(['Vendor', 'Model'], sort=False)['Score'].transform(min) == data_filter['Score']
 
@@ -50,3 +56,4 @@ plt.show()
 
 
 
+"""
