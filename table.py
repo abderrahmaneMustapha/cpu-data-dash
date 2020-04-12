@@ -2,10 +2,7 @@ import dash_table
 import pandas as pd
 all_data = pd.read_csv('data/SpeCopyspec.csv').dropna(axis=1, how='any', thresh=None, subset=None, inplace=False).drop(columns='URL')
  
-def table():
-    
-    
-    
+def table():  
     
     table = dash_table.DataTable(
                 id='table',
