@@ -1,14 +1,13 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_table
+
 from dash.dependencies import Input, Output, State
 
 import pandas as pd
 
 from filters import getFilter
-all_data = pd.read_csv('data/SpeCopyspec.csv').dropna(axis=1, how='any', thresh=None, subset=None, inplace=False).drop(columns='URL')
-
+from table import table
 external_stylesheets = [
     {
         'href': 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css',
@@ -73,21 +72,7 @@ app.layout = html.Div(children=[
         html.Div(children=[ 
 
             html.Div(children=[
-                dash_table.DataTable(
-                id='table',
-                columns=[{"name": i, "id": i,'deletable': True} for i in all_data],
-                data=all_data.sort_values(by=['Score'],ascending=False).head(n=10).to_dict('records'),
-                style_table={
-                    'overflowX': 'scroll',
-                    'width': '100%'
-                },
-
-                style_cell={
-                    'overflow': 'hidden',
-                    'textOverflow': 'ellipsis',
-                    'minWidth': '5rem',
-                },
-            )
+               table()
 
             ], className="table-container"),
             html.Div(children=[  dcc.Graph(

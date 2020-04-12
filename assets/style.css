@@ -35,8 +35,6 @@ table {
     background-color: #f2f2f2;
     border-color: #071228;
   }
-
-  
   
   #table tr:nth-child(even){background-color: #f2f2f2;}
   
