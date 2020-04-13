@@ -17,7 +17,7 @@ def table():
                 style_cell={
                     'overflow': 'hidden',
                     'textOverflow': 'ellipsis',
-                    'minWidth': '5rem',
+                    'minWidth': '8rem',
                 },
     )
 

@@ -17,11 +17,7 @@ body{
 
 }
 
-.search-container{
-    width: 30rem;
-    display: grid;
-    grid-template-columns:  60% 40%;
-}
+
 
 /* table */
 .table-container{
@@ -35,17 +31,23 @@ table {
     background-color: #f2f2f2;
     border-color: #071228;
   }
-  
+
   #table tr:nth-child(even){background-color: #f2f2f2;}
   
   #table tr:hover {background-color: #ddd;}
   
   #table th {
-    text-align: left;
+    text-align: center;
     background-color:#071228;
     color: white;
     border-color: #071228;
     text-align: center;
+  }
+
+  #table th  input{
+  background-color: white;
+  text-align: center;
+  color: #071228;
   }
 
   .column-header--delete svg path{

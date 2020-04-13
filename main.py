@@ -6,8 +6,9 @@ from dash.dependencies import Input, Output, State
 
 import pandas as pd
 
-from filters import getFilter
+from filters import getFilter,search
 from table import table
+
 external_stylesheets = [
     {
         'href': 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css',
@@ -26,11 +27,16 @@ app.layout = html.Div(children=[
             html.Label('CPU Search'), 
             html.Div(children=[      
                            
-                            dcc.Input(id='cpu_input', placeholder='Enter a cpu name here here!', type='text', className="form-control"),
-                            html.Button(id='search_btn', n_clicks=0, children='Submit', className="btn btn-light"),
+                             dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('CPU')      
+                                        ],
+                                        multi=True,
+                                        id="cpu_search"
+                            ),
                             ],
             className="search-container"),
-            html.Div(id='output-state'),
+    
 
             html.Div(children= [
                 html.Div(children=[
@@ -40,6 +46,7 @@ app.layout = html.Div(children=[
                                                 {'label': v, 'value': v } for  v in getFilter('Vendor')      
                                         ],
                                         multi=True,
+                                        id="vendor_search"
                                 ),
                 ], className="inputs-container"),
                 
@@ -50,6 +57,7 @@ app.layout = html.Div(children=[
                                                 {'label': v, 'value': v } for  v in getFilter('Kernel')      
                                         ],
                                         multi=True,
+                                        id="kernel_search"
                                 ),
                 ],className="inputs-container"),
                 
@@ -60,6 +68,7 @@ app.layout = html.Div(children=[
                                                 {'label': v, 'value': v } for  v in getFilter('OS')      
                                         ],
                                         multi=True,
+                                        id="os_search"
                                 ),
                                 ],
                 className="inputs-container"),
@@ -92,15 +101,18 @@ app.layout = html.Div(children=[
     
 ])
 
+@app.callback(
+    [Output("table", "data")],
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value')]
+)
+def updateTable(vendor_value, cpu_value, kernel_value, os_value):
+    
 
-@app.callback(Output('output-state', 'children'),
-              [Input('search_btn', 'n_clicks')],
-              [State('cpu_input', 'value')])
-def update_output(n_clicks, input1):
-    return u'''
-        The Button has been pressed {} times,
-        Input 1 is "{}",
-    '''.format(n_clicks, input1)
+    return search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=['Score'],ascending=False).head(n=20).to_dict('records'),
+
 
 
 
