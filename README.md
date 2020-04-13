@@ -4,5 +4,5 @@
 ## TODO
 - [ ] host the app on heroku
 - [ ] add graphs
-- [ ] add a search
-- [ ] add style to the table
+- [X] add a search
+- [ ] add css  style to the table
