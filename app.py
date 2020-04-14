@@ -64,6 +64,31 @@ app.layout = html.Div(children=[
                 ],className="inputs-container"),
                 
                 html.Div(children=[       
+                                html.Label('Model'),
+                                 dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('Model')      
+                                        ],
+                                        multi=True,
+                                        id="model_search"
+                                ),
+                                ],
+                className="inputs-container"),
+
+                   html.Div(children=[       
+                                html.Label('Mem'),
+                                 dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('Mem')      
+                                        ],
+                                        multi=True,
+                                        id="mem_search"
+                                ),
+                                ],
+                className="inputs-container"),
+
+
+                   html.Div(children=[       
                                 html.Label('OS'),
                                  dcc.Dropdown(
                                         options=[
@@ -71,6 +96,54 @@ app.layout = html.Div(children=[
                                         ],
                                         multi=True,
                                         id="os_search"
+                                ),
+                                ],
+                className="inputs-container"),
+
+                html.Div(children=[       
+                                html.Label('Dimms'),
+                                 dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('Dimms')      
+                                        ],
+                                        multi=True,
+                                        id="dimms_search"
+                                ),
+                                ],
+                className="inputs-container"),
+
+                 html.Div(children=[       
+                                html.Label('Threads'),
+                                 dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('Threads')      
+                                        ],
+                                        multi=True,
+                                        id="threads_search"
+                                ),
+                                ],
+                className="inputs-container"),
+
+                 html.Div(children=[       
+                                html.Label('Cores'),
+                                 dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('Cores')      
+                                        ],
+                                        multi=True,
+                                        id="cores_search"
+                                ),
+                                ],
+                className="inputs-container"),
+
+                 html.Div(children=[       
+                                html.Label('TDP'),
+                                 dcc.Dropdown(
+                                        options=[
+                                                {'label': v, 'value': v } for  v in getFilter('TDP')      
+                                        ],
+                                        multi=True,
+                                        id="tdp_search"
                                 ),
                                 ],
                 className="inputs-container"),
@@ -101,15 +174,23 @@ app.layout = html.Div(children=[
 ## update table data
 @app.callback(
     [Output("table", "data")],
-    [Input("vendor_search", 'value'),
+    [
+     Input("vendor_search", 'value'),
     Input("cpu_search", 'value'),
     Input("kernel_search", 'value'),
-    Input("os_search", 'value')]
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value')
+    ]
 )
-def updateTable(vendor_value, cpu_value, kernel_value, os_value):
+def updateTable(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
     
 
-    return search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=['Score'],ascending=False).to_dict('records'),
+    return search(vendor=vendor_value, cpu=cpu_value, kernel=kernel_value, os=os_value, model=model_value, mem=mem_value, dimms=dimms_value, threads=threads_value, cores=cores_value,tdp=tdp_value).sort_values(by=['Score'],ascending=False).to_dict('records'),
 #update table data end
 
 
@@ -120,11 +201,17 @@ def updateTable(vendor_value, cpu_value, kernel_value, os_value):
     Input("cpu_search", 'value'),
     Input("kernel_search", 'value'),
     Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
     Input("big-graph-y-param", 'value'),
     Input("big-graph-x-param", 'value')]
 )
-def updateGraph(vendor_value, cpu_value, kernel_value, os_value,x_value, y_values):
-    search_result = search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=[x_value],ascending=False)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value,x_value, y_values):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=[x_value],ascending=False)
 
     return setBigGraphData(search_result, y_values, x_value)
 #update big graph end

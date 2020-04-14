@@ -23,20 +23,26 @@ def getNumericCol():
 
 
 # searching 
-def search(vendor=None,kernel=None,os=None,cpu=None):
+def search(vendor=None,cpu=None,kernel=None,os=None,model=None,mem=None,dimms=None,threads=None,cores=None,tdp=None):
     
     
     result = all_data.copy()
 
     # check if one of the lists kernel, vendor, os , cpu
-    if vendor or kernel or os  or cpu :
+    if vendor or kernel or os  or cpu or model or mem or dimms or threads or cores or tdp:
         
         #put each data list and its column in this list
         values = [
                 {'data' : vendor, 'key' : "Vendor"}, 
                 {'data' : kernel, 'key': 'Kernel'}, 
                 {'data': os, 'key':'OS'},
-                {'data':cpu, 'key' : 'CPU'}
+                {'data':cpu, 'key' : 'CPU'},
+                {'data':model, 'key':'Model'},
+                {'data':mem, 'key':'Mem'},
+                {'data':dimms, 'key':'Dimms'},
+                {'data':threads, 'key':'Threads'},
+                {'data':cores, 'key':'Cores'},
+                {'data':tdp, 'key':'TDP'},
                 ]
         
         #list of the indexes
@@ -56,9 +62,10 @@ def search(vendor=None,kernel=None,os=None,cpu=None):
                 #and the data to the data list
                 locations.append( tuple((i) for i in v['data']))
         
+        
         #set the indexes
         result.set_index(indxes, inplace=True)
-        
+       
         #we have only a one index 
         if len(indxes) > 1:
             return result.loc[tuple(locations), :].reset_index()
