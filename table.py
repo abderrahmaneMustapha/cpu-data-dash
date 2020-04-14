@@ -9,7 +9,7 @@ def table():
     table = dash_table.DataTable(
                 id='table',
                 columns=[{"name": i, "id": i,'deletable': True} for i in all_data],
-                data=all_data.sort_values(by=['Score'],ascending=False).head(n=10).to_dict('records'),
+                page_size=15,
                 style_table={
                     'overflowX': 'scroll',
                     'width': '100%'

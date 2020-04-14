@@ -62,6 +62,10 @@ table {
     color: white;
     background-color: white;
   }
+  .page-number{
+    background-color : #F5F5F5 ;
+    color: #071228;
+  }
 
   /* Charts */
 

@@ -109,9 +109,11 @@ app.layout = html.Div(children=[
 def updateTable(vendor_value, cpu_value, kernel_value, os_value):
     
 
-    return search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=['Score'],ascending=False).head(n=20).to_dict('records'),
+    return search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=['Score'],ascending=False).to_dict('records'),
 #update table data end
 
+
+#update big graph
 @app.callback(
     Output("big-graph", "figure"),
     [Input("vendor_search", 'value'),
@@ -125,6 +127,7 @@ def updateGraph(vendor_value, cpu_value, kernel_value, os_value,x_value, y_value
     search_result = search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=[x_value],ascending=False)
 
     return setBigGraphData(search_result, y_values, x_value)
+#update big graph end
 
 if __name__ == '__main__':
     app.run_server(debug=True)

@@ -53,7 +53,9 @@ def setBigGraphData(data, yaxis, x):
     return {  'data': [{
                         'x': [d for d in data[x]], 
                         'y': [d for d in data[y]], 
+                        'customdata': [d for d in data['Vendor']],
                         'type': 'line', 'name': str(y),
+                        
                     } for y in list(yaxis)],
             'layout':
             {
