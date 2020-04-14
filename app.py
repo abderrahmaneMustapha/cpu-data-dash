@@ -8,6 +8,7 @@ import pandas as pd
 
 from filters import getFilter,search
 from table import table
+from charts import bigGraph,setBigGraphData
 
 external_stylesheets = [
     {
@@ -85,23 +86,19 @@ app.layout = html.Div(children=[
                table()
 
             ], className="table-container"),
-            html.Div(children=[  dcc.Graph(
-                id='example',
-                    figure={
-                        'data': [
-                            {'x': [1, 2, 3, 4, 5], 'y': [9, 6, 2, 1, 5], 'type': 'bar', 'name': 'Something'},
-                        
-                        ],
-                        'layout': {
-                            'title': 'Test'
-                        }
-                    }
-            )])
+            html.Div(children=[  
+
+              bigGraph()
+               
+            ], className="charts-container")
     ], className="main")         
   
     
 ])
 
+
+
+## update table data
 @app.callback(
     [Output("table", "data")],
     [Input("vendor_search", 'value'),
@@ -113,9 +110,21 @@ def updateTable(vendor_value, cpu_value, kernel_value, os_value):
     
 
     return search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=['Score'],ascending=False).head(n=20).to_dict('records'),
+#update table data end
 
+@app.callback(
+    Output("big-graph", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("big-graph-y-param", 'value'),
+    Input("big-graph-x-param", 'value')]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value,x_value, y_values):
+    search_result = search(vendor_value,kernel_value,os_value,cpu_value).sort_values(by=[x_value],ascending=False)
 
-
+    return setBigGraphData(search_result, y_values, x_value)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

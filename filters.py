@@ -15,6 +15,11 @@ all_data = pd.read_csv('data/SpeCopyspec.csv').dropna(axis=1, how='any', thresh=
 def getFilter(index):   
     return   all_data[index].unique()
 
+# get the filters that we are going to use in the big graph (only numeric columns)
+def getNumericCol():
+    numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+    return all_data.select_dtypes(include=numerics)
+
 
 
 # searching 
@@ -63,6 +68,3 @@ def search(vendor=None,kernel=None,os=None,cpu=None):
             return result.loc[tuple(locations)].reset_index()
     #if all the lists is null 
     return result
-
-
-print(search())

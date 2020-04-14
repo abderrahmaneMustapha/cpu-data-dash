@@ -10,7 +10,12 @@ from openpyxl import load_workbook
 all_data = pd.read_csv('data/SpeCopyspec.csv')
 print("\n info about the all data \n")
 
-print("number of ver ", all_data['Vendor'].unique())
+print("number of scores ", len(all_data['Score'].unique()))
+print(all_data.info())
+numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+
+newdf = all_data.select_dtypes(include=numerics)
+print(newdf.columns)
 # example
 """ 
 wb = load_workbook('SpeCopy.xlsx')
