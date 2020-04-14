@@ -1,10 +1,10 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-
 from dash.dependencies import Input, Output, State
 
 import pandas as pd
+import json 
 
 from filters import getFilter,search
 from table import table
@@ -215,6 +215,28 @@ def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, me
 
     return setBigGraphData(search_result, y_values, x_value)
 #update big graph end
+
+#update graph text output
+@app.callback(
+        Output('vendor_txt','children'),
+        [Input('big-graph', 'hoverData')]
+)
+def display_hover_data(hoverData):
+        if hoverData:
+                vendor = hoverData['points'][0]['text']
+                
+
+                return vendor
+@app.callback(
+        Output('model_txt','children'),
+        [Input('big-graph', 'hoverData')]
+)
+def display_hover_data(hoverData):
+        if hoverData:
+        
+                model = hoverData['points'][0]['customdata']
+
+                return model
 
 if __name__ == '__main__':
     app.run_server(debug=True)

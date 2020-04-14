@@ -29,38 +29,38 @@ body{
 table {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    background-color: #f2f2f2;
+    background-color :#F5F5F5;
     border-color: #071228;
   }
 
-  #table tr:nth-child(even){background-color: #f2f2f2;}
+  #table tr:nth-child(even){background-color:#F5F5F5;}
   
   #table tr:hover {background-color: #ddd;}
   
   #table th {
     text-align: center;
     background-color:#071228;
-    color: white;
+    color: #F5F5F5;
     border-color: #071228;
     text-align: center;
   }
 
   #table th  input{
-  background-color: white;
+  background-color: #F5F5F5;
   text-align: center;
   color: #071228;
   }
 
   .column-header--delete svg path{
-    border-color: white;
-    color: white;
-    background-color: white;
+    border-color: #F5F5F5;
+    color: #F5F5F5;
+    background-color: #F5F5F5;
   }
 
   .column-header--delete svg path:hover{
-    border-color: white;
-    color: white;
-    background-color: white;
+    border-color: #F5F5F5;
+    color: #F5F5F5;
+    background-color: #F5F5F5;
   }
   .page-number{
     background-color : #F5F5F5 ;
@@ -70,10 +70,34 @@ table {
   /* Charts */
 
   /* big graph */
+  .big-grah-param-container{
+    margin-right: 2rem;
+    display: block;
+  }
   .big-grah-param{
     display: flex;
     flex-direction: row;
     font-size: x-small;
-    margin: 2rem;
-    
+    margin-top:2rem;
+    border: solid 1px #F5F5F5;
+    border-radius: 1em;
+    padding:1rem
   } 
+
+ 
+
+  .big-graph-output-container{
+    display: flex;
+    flex-direction: column;
+    font-size: small;
+    border: solid 1px #F5F5F5;
+    color:#F5F5F5;
+    border-radius: 1em;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+  }
+  .big-graph-output-container Label{
+    font-size: medium;
+    font-weight: bold;
+  }
+
+ 
