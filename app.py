@@ -8,7 +8,7 @@ import json
 
 from filters import getFilter,search
 from table import table
-from charts import bigGraph,setBigGraphData
+from charts import bigGraph,setBigGraphData,setSideChartsdata,sideCharts
 
 external_stylesheets = [
     {
@@ -25,7 +25,10 @@ app.layout = html.Div(children=[
       
         html.Div(children=[ 
            
-            html.Div(children=[ html.H1(children='CPU Data Dashboard')], className="brand text-center mb-5"),
+           
+              html.Div(children=[
+
+                       html.Div(children=[ html.H1(children='CPU Data Dashboard')], className="brand text-center mb-5"),
             html.Label('CPU Search'), 
             html.Div(children=[      
                            
@@ -148,23 +151,43 @@ app.layout = html.Div(children=[
                                 ],
                 className="inputs-container"),
                 
-              ], className="input-group  d-flex justify-content-between mt-3 mb-2 ")
+              ], className="input-group  d-flex justify-content-between mt-3 mb-2 "),
+              ],id="header-content", className=" d-flex flex-column"),
+              html.Button(children="Header", id="btn-show", className="btn btn-success")
+        ],className='header d-flex flex-column  '),
 
-        ], className='header d-flex  flex-column'),
+#header end
 
+
+
+#main start
 
         html.Div(children=[ 
 
-            html.Div(children=[
-               table()
+        html.Div(children=[
+                table()
+         ], className="table-container"),
 
-            ], className="table-container"),
-            html.Div(children=[  
+        html.Div(children=[  
+                bigGraph(), 
+                html.Div(children=[  
+                        html.Div(children=[
+                       
+                        ],className="col-md-8"), 
+                         html.Div(children=[
+                        sideCharts('Vendor'),
+                        sideCharts('Model'),
+                        sideCharts('OS'),
+                        sideCharts('Kernel'),
+                        sideCharts('CPU'),
+                        ],className="col-md-4 "), 
+                 ], className="row pt-5" )
+                         
+        ], className="charts-container "),
 
-              bigGraph()
-               
-            ], className="charts-container")
-    ], className="main")         
+
+          
+        ], className="main")         
   
     
 ])
@@ -237,6 +260,121 @@ def display_hover_data(hoverData):
                 model = hoverData['points'][0]['customdata']
 
                 return model
+
+#update side graph
+
+@app.callback(
+    Output("side-pie-graph-Vendor", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'Vendor')
+
+
+@app.callback(
+    Output("side-pie-graph-OS", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'OS')
+
+
+
+@app.callback(
+    Output("side-pie-graph-Model", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'Model')
+
+
+@app.callback(
+    Output("side-pie-graph-CPU", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'CPU')
+
+
+@app.callback(
+    Output("side-pie-graph-Kernel", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'Kernel')
+
+#show and hide header 
+
+@app.callback(Output('header-content', 'className'), [Input('btn-show', 'n_clicks')])
+def on_click(data):
+
+        if  data == None or data % 2 == 0  :
+                return "hide"
+        else :
+                return "visible"
+
+
+     
 
 if __name__ == '__main__':
     app.run_server(debug=True)

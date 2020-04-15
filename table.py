@@ -9,10 +9,11 @@ def table():
     table = dash_table.DataTable(
                 id='table',
                 columns=[{"name": i, "id": i,'deletable': True} for i in all_data],
-                page_size=15,
+                
+                page_size=40,
                 style_table={
                     'overflowX': 'scroll',
-                    'width': '100%'
+                    
                 },
                 filter_action="native",
                 sort_action="native",

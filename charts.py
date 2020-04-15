@@ -4,6 +4,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from filters import getNumericCol
 import pandas as pd
+
+# big graph
 def bigGraph():
     graph = html.Div(
             
@@ -48,18 +50,20 @@ def bigGraph():
                             
 
                             ], className="big-grah-param" ),
-                        ],className="big-grah-param-container"),
+                        ],className="big-grah-param-container col-md-2"),
                         
 
                         
                         dcc.Graph(
                             id='big-graph',
+                            className="col-md-9"
                          
                         
                         )  
-            ], className="big-graph-container d-flex flex-row"
+            ], className="big-graph-container row"
     )
     return  graph
+
 
 def setBigGraphData(data, yaxis, x):
     
@@ -68,15 +72,52 @@ def setBigGraphData(data, yaxis, x):
                         'y': [d for d in data[y]], 
                         'customdata': [d for d in data['Model']],
                         'type': 'line', 'name': str(y),
-                        'text' : [d for d in data['Vendor']]
+                        'text' : [d for d in data['Vendor']],
+                         'textfont': {
+                              'color':"white"
+                         }
                         
                     } for y in list(yaxis)],
             'layout':
             {
                 'title': 'Find relations between numeric parameters',
-                "height":"30rem",
-                "width":  850,
+            
                 'clickmode': 'event+select',
+                'paper_bgcolor' : '#071228',
+                'plot_bgcolor':'#071228',
+                'font' : { 'color':'#DDDDDD'}
+
+               
+                
+            }
+    }
+
+#big graph end
+
+#side charts
+def sideCharts(param):
+    return dcc.Graph( id='side-pie-graph-'+param)  
+
+
+from filters import getFilter
+def setSideChartsdata(data,param):
+
+    data = data.groupby([param]).size().reset_index(name='count') 
+    return {  'data': [{
+                        'values': [d for d in data["count"]],
+                        
+                         'labels':[d for d in data[param]],
+                         'type': 'pie', 
+                        
+                    }],
+            'layout':
+            {
+                'title': 'Number of '+param+' in the dataset',
+                'paper_bgcolor' : '#071228',
+                'plot_bgcolor':'#071228',
+                'font' : { 'color':'#DDDDDD'},
+                'showlegend':False,
+                
                
                 
             }

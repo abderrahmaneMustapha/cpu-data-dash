@@ -1,10 +1,23 @@
 body{
     background-color:#071228;
-    padding : 1rem 2rem 4rem 2rem;
+    
 }
+.hide{
+ visibility: hidden;
+height: 2rem;
+}
+.display{
+  visibility:visible;
 
+}
 .header{
+  background-color: #071228;
+  padding: 0 1rem 1rem 1rem ;
     margin-bottom: 5rem;
+  
+    position: fixed;
+    z-index: 3;
+    
 }
  h1, label{
     color:#F5F5F5;
@@ -18,11 +31,16 @@ body{
 
 }
 
-
+main{
+  display: flex;
+  flex-direction: column;
+  
+  
+}
 
 /* table */
 .table-container{
-  padding-top: 3rem;
+  padding-top: 10rem;
   padding-bottom: 3rem;
 }
 
@@ -69,7 +87,14 @@ table {
 
   /* Charts */
 
+
+/*charts-container */
+
+
+
+
   /* big graph */
+  
   .big-grah-param-container{
     margin-right: 2rem;
     display: block;
@@ -100,4 +125,5 @@ table {
     font-weight: bold;
   }
 
+ 
  
