@@ -19,8 +19,9 @@ height: 2rem;
     z-index: 3;
     
 }
- h1, label{
+ h1,h3,h2, label{
     color:#F5F5F5;
+    font-weight: bolder;
 }
 
 /*  inputs */
@@ -92,7 +93,6 @@ table {
 
 
 
-
   /* big graph */
   
   .big-grah-param-container{
@@ -125,5 +125,8 @@ table {
     font-weight: bold;
   }
 
+  .form-check{
+    font-size: x-small;
+  }
  
  

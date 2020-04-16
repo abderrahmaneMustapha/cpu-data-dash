@@ -6,9 +6,9 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 import json 
 
-from filters import getFilter,search
+from filters import getFilter,search,getNumericCol
 from table import table
-from charts import bigGraph,setBigGraphData,setSideChartsdata,sideCharts
+from charts import bigGraph,setBigGraphData,setSideChartsdata,sideCharts,barChartsData,barCharts
 
 external_stylesheets = [
     {
@@ -171,19 +171,60 @@ app.layout = html.Div(children=[
         html.Div(children=[  
                 bigGraph(), 
                 html.Div(children=[  
+                         html.H3(children='Best and worst Vendors',className="text-center"),
                         html.Div(children=[
-                       
-                        ],className="col-md-8"), 
-                         html.Div(children=[
+                          
+                           #param container
+                           html.Div(children=[
+                                html.Div(children=[
+                                        html.Label('Group By'), 
+                                       dcc.Dropdown(
+                                        options=[
+                                            {'label': 'Vendor', 'value': 'Vendor'},
+                                            {'label': 'Model', 'value': 'Model'},
+                                            {'label': 'Kernel', 'value': 'Kernel'},
+                                            {'label': 'OS', 'value': 'OS'},
+                                            {'label': 'CPU', 'value': 'CPU'},
+                                        
+                                        ],
+                                        value=['Vendor'],
+                                        id="bar-graph-group-param",
+                                        multi=False
+                                    )
+                                ],),
+                                html.Div(children=[
+                                        html.Label('Y parameters'), 
+                                        dcc.Dropdown(
+                                                options=[
+                                                {'label': v, 'value': v} for v in getNumericCol()
+                                                
+                                                ],
+                                                value='Score',
+                                                id="bar-graph-x-param",
+                                                multi=False
+                                        ) 
+                                ], )
+                           ], className="col-md-12"),
+                            #param container end
+                             #bar graphs container
+                           html.Div(children=[
+                                   barCharts(id="best-vendors-bar"),
+                                   barCharts(id="worst-vendors-bar")
+                           ], className="row col-md-9"),
+                           #bar graphs container end
+
+
+                        ],className="col-md-12"), 
+                        html.Div(children=[
                         sideCharts('Vendor'),
                         sideCharts('Model'),
                         sideCharts('OS'),
                         sideCharts('Kernel'),
-                        sideCharts('CPU'),
-                        ],className="col-md-4 "), 
-                 ], className="row pt-5" )
+                         sideCharts('CPU',this_width='col-md-12'),
+                        ],className="col-md-12 row "), 
+                 ], className="row pt-5 d-flex justify-content-center flex-row" )
                          
-        ], className="charts-container "),
+        ], className="charts-container"),
 
 
           
@@ -373,8 +414,21 @@ def on_click(data):
         else :
                 return "visible"
 
+@app.callback(
+    Output("best-vendors-bar", "figure"),
+    [Input("bar-graph-group-param", 'value'),
+    Input("bar-graph-x-param", 'value')]
+)
+def updateBestTable(param,x_value):
+        return barChartsData(param,x_value,"best")
 
-     
+@app.callback(
+    Output("worst-vendors-bar", "figure"),
+    [Input("bar-graph-group-param", 'value'),
+    Input("bar-graph-x-param", 'value')]
+)
+def updateBestTable(param,x_value):
+        return barChartsData(param,x_value,"worst")
 
 if __name__ == '__main__':
     app.run_server(debug=True)

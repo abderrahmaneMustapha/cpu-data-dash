@@ -2,7 +2,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from filters import getNumericCol
+from filters import getNumericCol,findMaxByGroup
 import pandas as pd
 
 # big graph
@@ -95,8 +95,8 @@ def setBigGraphData(data, yaxis, x):
 #big graph end
 
 #side charts
-def sideCharts(param):
-    return dcc.Graph( id='side-pie-graph-'+param)  
+def sideCharts(param, this_width="col-md-6"):
+    return dcc.Graph( id='side-pie-graph-'+param, className=this_width)  
 
 
 from filters import getFilter
@@ -122,3 +122,47 @@ def setSideChartsdata(data,param):
                 
             }
     }
+
+#params1 for os kernel vendor and model
+# params 2 for  the other numeric columns 
+def barCharts(id=None):
+    return dcc.Graph( id=id , className="col-md-12")  
+def barChartsData(params1=['Vendor'], x_value="Score", best_worst="best"):
+    data = pd.DataFrame(findMaxByGroup(params1,by=best_worst))
+    
+    indexes = data.set_index(params1)
+    
+    return {  'data': [{
+                        'y': [d for d in data[x_value]], 
+     
+                        'orientation':'v',
+                        'type': 'bar',
+                        'label' : indexes.index,
+                        'values' : indexes.index,
+                        'text' : indexes.index,
+                         'textfont': {
+                              'color':"white",
+                               
+                                                             
+                        }
+                        
+                    }],
+            'layout':
+            {
+                'title': best_worst+' '+params1,
+                'width':1000,
+                
+                 
+                'clickmode': 'event+select',
+                'paper_bgcolor' : '#071228',
+                'plot_bgcolor':'#071228',
+                'font' : { 'color':'#DDDDDD'}
+
+               
+                
+            }
+    }
+
+
+
+

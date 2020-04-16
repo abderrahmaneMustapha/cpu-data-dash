@@ -75,3 +75,10 @@ def search(vendor=None,cpu=None,kernel=None,os=None,model=None,mem=None,dimms=No
             return result.loc[tuple(locations)].reset_index()
     #if all the lists is null 
     return result
+
+def findMaxByGroup(params, by="best"):
+    if by == "best":
+        data_temp =all_data.sort_values(['Score'],ascending=False).groupby(params).head().head(20)
+    else:
+        data_temp =all_data.sort_values(['Score'],ascending=False).groupby(params).tail().tail(20)
+    return  data_temp
