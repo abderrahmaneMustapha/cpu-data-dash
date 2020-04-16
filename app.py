@@ -171,7 +171,7 @@ app.layout = html.Div(children=[
         html.Div(children=[  
                 bigGraph(), 
                 html.Div(children=[  
-                         html.H3(children='Best and worst Vendors',className="text-center"),
+                         html.H3(children='Best and worst Vendors, Kernel, OS , Model,CPU',className="text-center"),
                         html.Div(children=[
                           
                            #param container

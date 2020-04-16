@@ -149,7 +149,7 @@ def barChartsData(params1=['Vendor'], x_value="Score", best_worst="best"):
                     }],
             'layout':
             {
-                'title': best_worst+' '+params1,
+                'title': best_worst+' '+params1[0],
                 'width':1000,
                 
                  
