@@ -71,8 +71,14 @@ def setBigGraphData(data, yaxis, x):
                         'x': [d for d in data[x]], 
                         'y': [d for d in data[y]], 
                         'customdata': [d for d in data['Model']],
+                        #'a': [d for d in data['OS']],
                         'type': 'line', 'name': str(y),
                         'text' : [d for d in data['Vendor']],
+                         'hovertemplate': " Vendor : %{text}<br>"+
+                                          " Model : %{customdata}<br>"+
+                                          #" OS : %{a}<br>"+
+                                           y +" : %{y}<br>"+
+                                           x +" : %{x}<br>",
                          'textfont': {
                               'color':"white"
                          }
@@ -126,20 +132,26 @@ def setSideChartsdata(data,param):
 #params1 for os kernel vendor and model
 # params 2 for  the other numeric columns 
 def barCharts(id=None):
-    return dcc.Graph( id=id , className="col-md-12")  
-def barChartsData(params1=['Vendor'], x_value="Score", best_worst="best"):
+    return dcc.Graph( id=id , className="col-md-12") 
+
+   
+     
+def barChartsData(params1=['Vendor'], y_value="Score", best_worst="best"):
     data = pd.DataFrame(findMaxByGroup(params1,by=best_worst))
     
     indexes = data.set_index(params1)
     
     return {  'data': [{
-                        'y': [d for d in data[x_value]], 
-     
+                        'y': data[y_value], 
+                         
                         'orientation':'v',
                         'type': 'bar',
                         'label' : indexes.index,
                         'values' : indexes.index,
                         'text' : indexes.index,
+                        'textposition' :  "inside",
+                        'hovertemplate': "Data : %{text}<br>"+
+                                         y_value+" : %{y}<br>",
                          'textfont': {
                               'color':"white",
                                

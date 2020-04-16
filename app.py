@@ -189,7 +189,7 @@ app.layout = html.Div(children=[
                                         ],
                                         value=['Vendor'],
                                         id="bar-graph-group-param",
-                                        multi=False
+                                        multi=True
                                     )
                                 ],),
                                 html.Div(children=[
@@ -419,16 +419,16 @@ def on_click(data):
     [Input("bar-graph-group-param", 'value'),
     Input("bar-graph-x-param", 'value')]
 )
-def updateBestTable(param,x_value):
-        return barChartsData(param,x_value,"best")
+def updateBestTable(param,y_value):
+        return barChartsData(param,y_value,"best")
 
 @app.callback(
     Output("worst-vendors-bar", "figure"),
     [Input("bar-graph-group-param", 'value'),
     Input("bar-graph-x-param", 'value')]
 )
-def updateBestTable(param,x_value):
-        return barChartsData(param,x_value,"worst")
+def updateBestTable(param,y_value):
+        return barChartsData(param,y_value,"worst")
 
 if __name__ == '__main__':
     app.run_server(debug=True)
