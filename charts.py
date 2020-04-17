@@ -144,7 +144,7 @@ def setSideChartsbardata(data,param):
                          'type': 'bar', 
                           'orientation' :'h',
                           'hovertemplate':  "name of the "+ param +" : %{text}<br>"+
-                                            "number of "+ param +" : %{y}<br>"                                                                                
+                                            "number of "+ param +" : %{x}<br>"                                                                                
                                            
                            
                     }],
