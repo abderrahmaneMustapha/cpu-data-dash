@@ -2,8 +2,14 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from filters import getNumericCol,findMaxByGroup
+
+
+import plotly.express as px
+
 import pandas as pd
+
+from filters import getNumericCol,findMaxByGroup
+
 
 # big graph
 def bigGraph():
@@ -11,14 +17,6 @@ def bigGraph():
             
             children=[
                         html.Div(children=[
-
-                            html.Div(children=[
-                                html.Label("Vendor : "),
-                                html.Div( id="vendor_txt"),
-                                html.Label("Model : ", className="pt-3"),
-                                html.Div( id="model_txt"),
-                                                              
-                            ], className="big-graph-output-container"),
 
                             html.Div(children=[
                                 
@@ -70,15 +68,20 @@ def setBigGraphData(data, yaxis, x):
     return {  'data': [{
                         'x': [d for d in data[x]], 
                         'y': [d for d in data[y]], 
-                        'customdata': [d for d in data['Model']],
+                        
                         #'a': [d for d in data['OS']],
                         'type': 'line', 'name': str(y),
                         'text' : [d for d in data['Vendor']],
-                         'hovertemplate': " Vendor : %{text}<br>"+
-                                          " Model : %{customdata}<br>"+
-                                          #" OS : %{a}<br>"+
+                         'hovertemplate': [
                                            y +" : %{y}<br>"+
-                                           x +" : %{x}<br>",
+                                           x +" : %{x}<br>"+
+                                           "Vendor : "+v+"<br>"+
+                                           "Model : "+m+"<br>"+
+                                           "OS : "+o+"<br>"+
+                                           "CPU : "+c+"<br>"                                         
+                                           for v,m,o,c in zip(data['Vendor'], data['Model'], data['OS'], data['CPU'])
+                                           ],
+
                          'textfont': {
                               'color':"white"
                          }
@@ -102,13 +105,14 @@ def setBigGraphData(data, yaxis, x):
 
 #side charts
 def sideCharts(param, this_width="col-md-6"):
-    return dcc.Graph( id='side-pie-graph-'+param, className=this_width)  
+    return dcc.Graph( id='side-pie-graph-'+param, className=this_width+" text-left")  
 
 
 from filters import getFilter
 def setSideChartsdata(data,param):
 
     data = data.groupby([param]).size().reset_index(name='count') 
+
     return {  'data': [{
                         'values': [d for d in data["count"]],
                         
@@ -150,8 +154,14 @@ def barChartsData(params1=['Vendor'], y_value="Score", best_worst="best"):
                         'values' : indexes.index,
                         'text' : indexes.index,
                         'textposition' :  "inside",
-                        'hovertemplate': "Data : %{text}<br>"+
-                                         y_value+" : %{y}<br>",
+                        'hovertemplate': [
+                                         y_value+" : %{y}<br>"+
+                                          "Vendor : "+v+"<br>"+
+                                           "Model : "+m+"<br>"+
+                                           "OS : "+o+"<br>"+
+                                           "CPU : "+c+"<br>"                                         
+                                           for v,m,o,c in zip(data['Vendor'], data['Model'], data['OS'], data['CPU'])
+                                           ],
                          'textfont': {
                               'color':"white",
                                
@@ -174,6 +184,90 @@ def barChartsData(params1=['Vendor'], y_value="Score", best_worst="best"):
                 
             }
     }
+
+
+
+def scatterChart():
+    graph = html.Div(
+            
+            children=[
+                        html.Div(children=[
+
+                            html.Div(children=[
+                                
+                                    html.Div(children=[
+                                        html.Label('X parameters'), 
+                                        dcc.RadioItems(
+                                        options=[
+                                            {'label': v, 'value': v} for v in getNumericCol()
+                                        
+                                        ],
+                                        value='TDP',
+                                        id="scatter-graph-x-param",
+                                        
+                                        labelStyle={'display': 'flex'}
+                                    )
+                            ], className="form-check"),
+
+                            html.Div(children=[
+                                html.Label('Y parameters'), 
+                                    dcc.RadioItems(
+                                        options=[
+                                            {'label': v, 'value': v} for v in getNumericCol()
+                                        
+                                        ],
+                                        value='Score',
+                                        id="scatter-graph-y-param",
+                                        labelStyle={'display': 'flex'}
+                                    ) 
+                            ], className="form-check")
+                            
+
+                            ], className="big-grah-param" ),
+                        ],className="big-grah-param-container col-md-2"),
+                        
+
+                        
+                        dcc.Graph(
+                            id='scatter-graph',
+                            className="col-md-9"
+                         
+                        
+                        )  
+            ], className="big-graph-container row"
+    )
+
+    return graph
+
+
+
+def scatterChartsData(data, y_value="Score", x_value="TDP",param="Vendor"):
+    print(data.columns)
+
+    fig = px.scatter(data,
+            x=data[x_value], 
+            y=data[y_value], 
+            color=data[param],
+            hover_data=['Vendor', 'OS', 'Model', 'Kernel', 'CPU']     
+    )
+   
+
+  
+
+    fig.update_layout(
+    title = "Correlation between " +y_value+ " and "+ x_value,
+    xaxis_title=x_value,
+    yaxis_title=y_value,
+    paper_bgcolor="#071228",
+    plot_bgcolor="#071228",
+    font = {'color' : '#DDDDDD' }
+    )
+
+    fig.update_yaxes(showgrid = False)
+    fig.update_xaxes(showgrid = False)
+    return fig
+
+
 
 
 

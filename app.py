@@ -8,7 +8,7 @@ import json
 
 from filters import getFilter,search,getNumericCol
 from table import table
-from charts import bigGraph,setBigGraphData,setSideChartsdata,sideCharts,barChartsData,barCharts
+from charts import bigGraph,setBigGraphData,setSideChartsdata,sideCharts,barChartsData,barCharts,scatterChart,scatterChartsData
 
 external_stylesheets = [
     {
@@ -170,6 +170,25 @@ app.layout = html.Div(children=[
 
         html.Div(children=[  
                 bigGraph(), 
+                html.H3(children="Correlation between parameters", className="text-center col-md-12 mt-5 "),
+                html.Div(children=[
+                                        html.Label('Group By', className="text-center ml-5 mr-5"), 
+                                       dcc.Dropdown(
+                                        options=[
+                                            {'label': 'Vendor', 'value': 'Vendor'},
+                                            {'label': 'Model', 'value': 'Model'},
+                                            {'label': 'Kernel', 'value': 'Kernel'},
+                                            {'label': 'OS', 'value': 'OS'},
+                                            {'label': 'CPU', 'value': 'CPU'},
+                                        
+                                        ],
+                                        value='Vendor',
+                                        id="scatter-graph-group-param",
+                                        multi=False,
+                                        className="mb-3 ml-5 mr-5"
+                                    )
+                ],),
+                 scatterChart(),
                 html.Div(children=[  
                          html.H3(children='Best and worst Vendors, Kernel, OS , Model,CPU',className="text-center"),
                         html.Div(children=[
@@ -177,7 +196,7 @@ app.layout = html.Div(children=[
                            #param container
                            html.Div(children=[
                                 html.Div(children=[
-                                        html.Label('Group By'), 
+                                        html.Label('Group By', className="ml-5 mr-5"), 
                                        dcc.Dropdown(
                                         options=[
                                             {'label': 'Vendor', 'value': 'Vendor'},
@@ -189,11 +208,12 @@ app.layout = html.Div(children=[
                                         ],
                                         value=['Vendor'],
                                         id="bar-graph-group-param",
-                                        multi=True
+                                        multi=True,
+                                        className="ml-5 mr-5"
                                     )
                                 ],),
                                 html.Div(children=[
-                                        html.Label('Y parameters'), 
+                                        html.Label('Y parameters', className="ml-5 mr-5"), 
                                         dcc.Dropdown(
                                                 options=[
                                                 {'label': v, 'value': v} for v in getNumericCol()
@@ -201,7 +221,8 @@ app.layout = html.Div(children=[
                                                 ],
                                                 value='Score',
                                                 id="bar-graph-x-param",
-                                                multi=False
+                                                multi=False,
+                                                className="ml-5 mr-5"
                                         ) 
                                 ], )
                            ], className="col-md-12"),
@@ -216,13 +237,22 @@ app.layout = html.Div(children=[
 
                         ],className="col-md-12"), 
                         html.Div(children=[
+                        html.H3(children='Number of  Vendors, Kernel, Model, CPU ... in the dataset ',className="text-center  w-100 col-md-12"),
+                        html.P(children='you can filter this data using the parameters in the header',className="text-center  w-100 col-md-12"),
                         sideCharts('Vendor'),
                         sideCharts('Model'),
                         sideCharts('OS'),
                         sideCharts('Kernel'),
-                         sideCharts('CPU',this_width='col-md-12'),
+                        sideCharts('CPU'),
+                        sideCharts('Ver'),
+                        sideCharts('Dimms'),
+                        sideCharts('Cores'),
                         ],className="col-md-12 row "), 
-                 ], className="row pt-5 d-flex justify-content-center flex-row" )
+                 ], className="row pt-5 d-flex justify-content-center flex-row" ),
+
+                
+                       
+              
                          
         ], className="charts-container"),
 
@@ -280,27 +310,7 @@ def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, me
     return setBigGraphData(search_result, y_values, x_value)
 #update big graph end
 
-#update graph text output
-@app.callback(
-        Output('vendor_txt','children'),
-        [Input('big-graph', 'hoverData')]
-)
-def display_hover_data(hoverData):
-        if hoverData:
-                vendor = hoverData['points'][0]['text']
-                
 
-                return vendor
-@app.callback(
-        Output('model_txt','children'),
-        [Input('big-graph', 'hoverData')]
-)
-def display_hover_data(hoverData):
-        if hoverData:
-        
-                model = hoverData['points'][0]['customdata']
-
-                return model
 
 #update side graph
 
@@ -404,6 +414,64 @@ def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, me
 
     return setSideChartsdata(search_result,'Kernel')
 
+
+@app.callback(
+    Output("side-pie-graph-Ver", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'Ver')
+
+@app.callback(
+    Output("side-pie-graph-Dimms", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'Dimms')
+
+@app.callback(
+    Output("side-pie-graph-Cores", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return setSideChartsdata(search_result,'Cores')
+
 #show and hide header 
 
 @app.callback(Output('header-content', 'className'), [Input('btn-show', 'n_clicks')])
@@ -429,6 +497,30 @@ def updateBestTable(param,y_value):
 )
 def updateBestTable(param,y_value):
         return barChartsData(param,y_value,"worst")
+
+#update scatter plot graph
+
+@app.callback(
+    Output("scatter-graph", "figure"),
+    [Input("vendor_search", 'value'),
+    Input("cpu_search", 'value'),
+    Input("kernel_search", 'value'),
+    Input("os_search", 'value'),
+    Input("model_search", 'value'),
+    Input("mem_search", 'value'),
+    Input("dimms_search", 'value'),
+    Input("threads_search", 'value'),
+    Input("cores_search", 'value'),
+    Input("tdp_search", 'value'),
+    Input("scatter-graph-x-param", 'value'),
+    Input("scatter-graph-y-param", 'value'),
+    Input("scatter-graph-group-param", 'value'),
+   ]
+)
+def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value,x_value, y_values, param):
+    search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
+
+    return scatterChartsData(search_result, y_values, x_value, param)
 
 if __name__ == '__main__':
     app.run_server(debug=True)

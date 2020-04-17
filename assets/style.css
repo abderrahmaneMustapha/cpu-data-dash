@@ -23,6 +23,9 @@ height: 2rem;
     color:#F5F5F5;
     font-weight: bolder;
 }
+p{
+  color:#F5F5F5;
+}
 
 /*  inputs */
 .inputs-container{
