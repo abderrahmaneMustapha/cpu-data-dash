@@ -133,6 +133,34 @@ def setSideChartsdata(data,param):
             }
     }
 
+def setSideChartsbardata(data,param):
+
+    data = data.groupby([param]).size().reset_index(name='count').sort_values(by='count',ascending=True) 
+
+    return {  'data': [{
+                        'x': [d for d in data["count"]],
+                        'marker': {'color':data["count"]},
+                         'text':[d for d in data[param]],
+                         'type': 'bar', 
+                          'orientation' :'h',
+                          'hovertemplate':  "name of the "+ param +" : %{text}<br>"+
+                                            "number of "+ param +" : %{y}<br>"                                                                                
+                                           
+                           
+                    }],
+            'layout':
+            {
+                'title': 'Number of '+param+' in the dataset',
+                'paper_bgcolor' : '#071228',
+                'plot_bgcolor':'#071228',
+                'font' : { 'color':'#DDDDDD'},
+                'showlegend':False,
+                
+               
+                
+            }
+    }
+
 #params1 for os kernel vendor and model
 # params 2 for  the other numeric columns 
 def barCharts(id=None):

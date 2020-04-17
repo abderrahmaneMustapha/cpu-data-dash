@@ -8,7 +8,7 @@ import json
 
 from filters import getFilter,search,getNumericCol
 from table import table
-from charts import bigGraph,setBigGraphData,setSideChartsdata,sideCharts,barChartsData,barCharts,scatterChart,scatterChartsData
+from charts import (bigGraph,setBigGraphData,setSideChartsdata,sideCharts,barChartsData,barCharts,scatterChart,scatterChartsData,setSideChartsbardata)
 
 external_stylesheets = [
     {
@@ -240,13 +240,13 @@ app.layout = html.Div(children=[
                         html.H3(children='Number of  Vendors, Kernel, Model, CPU ... in the dataset ',className="text-center  w-100 col-md-12"),
                         html.P(children='you can filter this data using the parameters in the header',className="text-center  w-100 col-md-12"),
                         sideCharts('Vendor'),
-                        sideCharts('Model'),
                         sideCharts('OS'),
                         sideCharts('Kernel'),
-                        sideCharts('CPU'),
                         sideCharts('Ver'),
                         sideCharts('Dimms'),
                         sideCharts('Cores'),
+                        sideCharts('CPU'),
+                        sideCharts('Model'),
                         ],className="col-md-12 row "), 
                  ], className="row pt-5 d-flex justify-content-center flex-row" ),
 
@@ -372,7 +372,7 @@ def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, me
 def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
     search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
 
-    return setSideChartsdata(search_result,'Model')
+    return setSideChartsbardata(search_result,'Model')
 
 
 @app.callback(
@@ -392,7 +392,7 @@ def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, me
 def updateGraph(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value):
     search_result = search(vendor_value, cpu_value, kernel_value, os_value, model_value, mem_value, dimms_value, threads_value, cores_value,tdp_value).sort_values(by=['Score'],ascending=False)
 
-    return setSideChartsdata(search_result,'CPU')
+    return setSideChartsbardata(search_result,'CPU')
 
 
 @app.callback(
